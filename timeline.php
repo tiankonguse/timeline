@@ -88,12 +88,52 @@ require BASE_INC . 'head.inc.php';
 	<footer>
 	<?php  require BASE_INC . 'footer.inc.php'; ?>
 	</footer>
+	<script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
 	<script>
-		var nowProjectEventNum = <?php echo $projectEventNum;?>;
-		var lastEventId        = <?php echo $lastEventId;?>;
+	jQuery(function() {
+        var nowProjectEventNum = <?php echo $projectEventNum;?>;
+        var lastEventId        = <?php echo $lastEventId;?>;
+	    var nextDataNumber = 5;
+	    var ajaxLoading = false;
+	    var docNode = jQuery(document);
+	    var ulNode =  jQuery("ul.timeline");
+		    
+	    if(nowProjectEventNum == 0){
+	        jQuery("#fetchNextData").css("display","none");
+	    }
+	    
+	    jQuery('#fetchNextData').click(function() {
+	        if(nowProjectEventNum > 0){
+	            var $this = jQuery(this);
+	            $this.addClass('disabled').text('正在加载后面的数据...');
+	            ajaxLoading = true;
+
+	            jQuery.get(
+	    	            './inc/', 
+	    	            {
+
+		    	            },
+	    	            function(data) {
+	                ajaxLoading = false;
+	                ulNode.append(data);
+	            });
+	        }
+
+	    });
+
+	    docNode.scroll(function() {
+	        if (nowProjectEventNum > 0 && docNode.height() - jQuery(window).height() - docNode.scrollTop() < 10) {
+	            if (!ajaxLoading) {
+	                jQuery('#fetchNextData').click();
+	            }
+	        }
+
+	    });
+
+	});
+
 	</script>
 
-	<script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
-	<script src="<?php echo MAIN_DOMAIN;?>js/main.js"></script>
+	
 </body>
 </html>
