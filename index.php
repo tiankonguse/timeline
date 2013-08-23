@@ -19,7 +19,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
 }
 
 if($login || 1){
-	echo "<div class=\"top-fixed\" >添加新活动</div>";
+	echo "<div class=\"top-fixed\" >添加新项目</div>";
 }
 ?>
 
@@ -51,7 +51,7 @@ if($login || 1){
             <div>
                 <button id="fetchNextData" class="btn"
                     style="width: 100%;"
-                >查看更多.</button>
+                >查看更多</button>
             </div>
         </div>
     </section>
@@ -99,7 +99,7 @@ if($login || 1){
         jQuery('#fetchNextData').click(function() {
             if(!ajaxLoading && haveData){
                 var $this = jQuery(this);
-                $this.addClass('disabled').text('正在加载后面的数据...');
+                $this.text('正在加载后面的数据...');
                 ajaxLoading = true;
 
                 jQuery.post(
@@ -116,8 +116,9 @@ if($login || 1){
                 			    lastProjectId = data.message.id;
                 			    console.log(lastProjectId);
                 			    ulNode.append(data.message.html);
+                			    $this.text('查看更多');
                         }else{
-                        	   $this.addClass('disabled').text('加载出错');
+                        	   $this.text('加载出错');
                         }
                     	    ajaxLoading = false;
                     },"json"); 
@@ -125,7 +126,7 @@ if($login || 1){
         });
 
         docNode.scroll(function() {
-            if (haveData && docNode.height() - jQuery(window).height() - docNode.scrollTop() < 10) {
+            if (haveData && docNode.height() - jQuery(window).height() - docNode.scrollTop() < 150) {
                 if (!ajaxLoading && haveData) {
                     jQuery('#fetchNextData').click();
                 }

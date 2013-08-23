@@ -161,11 +161,17 @@ ul              ..item-list .remark {
     width: 100%;
     top: 0;
     background-color: rgb(201, 190, 190);
+    z-index: 2;
 }
 
 .top-fixed:hover {
     cursor: pointer;
     background-color: rgb(235, 193, 193);
+}
+
+.top2-fixed{
+    top: 30px;
+    background-color: rgb(114, 107, 107);
 }
 
 .modal {

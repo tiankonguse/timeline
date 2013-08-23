@@ -39,6 +39,16 @@ require BASE_INC . 'head.inc.php';
 <link href="<?php echo MAIN_DOMAIN;?>css/main.css" rel="stylesheet">
 </head>
 <body>
+<?php
+$login = true;
+if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
+    $login = false;
+}
+echo "<a href=\"".MAIN_DOMAIN."\"><div class=\"top-fixed \" >项目列表</div></a>";
+if($login || 1){
+    echo "<div class=\"top-fixed top2-fixed\" >添加新活动</div>";
+}
+?>
 	<header>
 		<div class="title">
 			<a href="<?php echo MAIN_DOMAIN."timeline.php?id=".$projectId;?>"><?php echo $title; ?>
@@ -53,7 +63,7 @@ require BASE_INC . 'head.inc.php';
 			<ul class="timeline">
 			<?php
 			$dataNumber = 10;
-			$sql = "SELECT * FROM timeline_event WHERE projectId = '$projectId' limit 0,$dataNumber ";
+			$sql = "SELECT * FROM timeline_event WHERE projectId = '$projectId' ORDER BY id DESC limit 0,$dataNumber ";
 			$resourceId = mysql_query($sql ,$conn);
 
 			while($_projectEvent=@mysql_fetch_array($resourceId)){
@@ -122,7 +132,7 @@ require BASE_INC . 'head.inc.php';
 	    });
 
 	    docNode.scroll(function() {
-	        if (nowProjectEventNum > 0 && docNode.height() - jQuery(window).height() - docNode.scrollTop() < 10) {
+	        if (nowProjectEventNum > 0 && docNode.height() - jQuery(window).height() - docNode.scrollTop() < 150) {
 	            if (!ajaxLoading) {
 	                jQuery('#fetchNextData').click();
 	            }
