@@ -42,108 +42,213 @@ require BASE_INC . 'head.inc.php';
 <?php
 $login = true;
 if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
-    $login = false;
+	$login = false;
 }
 echo "<a href=\"".MAIN_DOMAIN."\"><div class=\"top-fixed \" >项目列表</div></a>";
-if($login || 1){
-    echo "<div class=\"top-fixed top2-fixed\" >添加新活动</div>";
+if($login){
+	echo "<div class=\"top-fixed top2-fixed\" >添加新活动</div>";
 }
 ?>
-	<header>
-		<div class="title">
-			<a href="<?php echo MAIN_DOMAIN."timeline.php?id=".$projectId;?>"><?php echo $title; ?>
-			</a>
-			<div class="sub-title">
-			<?php echo $projectDescription; ?>
-			</div>
-		</div>
-	</header>
-	<section>
-		<div class="container">
-			<ul class="timeline">
-			<?php
-			$dataNumber = 10;
-			$sql = "SELECT * FROM timeline_event WHERE projectId = '$projectId' ORDER BY id DESC limit 0,$dataNumber ";
-			$resourceId = mysql_query($sql ,$conn);
+    <header>
+    
+        <div class="title">
+            <a
+                href="<?php echo MAIN_DOMAIN."timeline.php?id=".$projectId;?>"><?php echo $title; ?>
+            </a>
+            <div class="sub-title">
+            <?php echo $projectDescription; ?>
+            </div>
+        </div>
+    </header>
+    <section>
+        <div class="container">
+            <ul class="timeline">
+            <?php
+            $dataNumber = 10;
+            $sql = "SELECT * FROM timeline_event WHERE projectId = '$projectId' ORDER BY id DESC limit 0,$dataNumber ";
+            $resourceId = mysql_query($sql ,$conn);
 
-			while($_projectEvent=@mysql_fetch_array($resourceId)){
-				$lastEventId = $projectEventId = $_projectEvent["id"];
-				$projectEventTime = $_projectEvent["time"];
-				$projectEventTitle = $_projectEvent["title"];
-				$projectEventContent = $_projectEvent["content"];
-				$date = date("Y-m-d",$projectEventTime);
-				$time = date("H-i-s",$projectEventTime);
-				echo "
+            while($_projectEvent=@mysql_fetch_array($resourceId)){
+            	$lastEventId = $projectEventId = $_projectEvent["id"];
+            	$projectEventTime = $_projectEvent["time"];
+            	$projectEventTitle = $_projectEvent["title"];
+            	$projectEventContent = $_projectEvent["content"];
+            	$date = date("Y-m-d",$projectEventTime);
+            	$time = date("H:i:s",$projectEventTime);
+            	echo "
                 <li>
                     <div class=\"date\">{$date}</div>
                     <div class=\"time\">{$time}</div>
                     <div class=\"number\"> {$projectEventNum}</div>
                     <div class=\"content\">
                         <article>
-                        {$projectEventContent}
+                        <div class=\"timeline-title\">{$projectEventTitle}</div>
+                        <div>{$projectEventContent}</div>
                         </article>
                     </div>
                 </li>
                 ";
-                        $projectEventNum--;
-			}
-			?>
+            	$projectEventNum--;
+            }
+            ?>
 
-			</ul>
-			<div style="margin-left: 180px;">
-				<button id="fetchNextData" class="btn" style="width: 100%;">查看更多.</button>
-			</div>
-		</div>
-	</section>
-	<footer>
-	<?php  require BASE_INC . 'footer.inc.php'; ?>
-	</footer>
-	<script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
-	<script>
+            </ul>
+            <div>
+                <button id="fetchNextData" class="btn"
+                    style="width: 100%;">查看更多</button>
+            </div>
+        </div>
+    </section>
+    <footer>
+    <?php  require BASE_INC . 'footer.inc.php'; ?>
+    </footer>
+    <div id="addevent" class="modal hide">
+        <div class="modal-header"
+            style="text-align: center; cursor: move;">
+            <button type="button" class="close">&times;</button>
+            <h3>添加新事件</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                <span id="addevent_titlePre">sssss</span> <input
+                    id="addevent_title" type="text" class="longtext">
+            </p>
+            <p>
+                请输入 描述：
+                <textarea id="addevent_content"
+                    style="width: 100%; height: 200px;"></textarea>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn cancel">取消</button>
+            <button class="btn btn-primary ok">确认</button>
+        </div>
+    </div>
+    <div class="modal-backdrop hide"></div>
+    <div class="modal-load hide">
+        <div class="modal-load-img">
+            正在努力加载中。。。 <img
+                src="<?php echo MAIN_DOMAIN;?>img/loading.gif"
+                style="height: 30px;" />
+        </div>
+    </div>
+    <script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
+    <script>
 	jQuery(function() {
         var nowProjectEventNum = <?php echo $projectEventNum;?>;
         var lastEventId        = <?php echo $lastEventId;?>;
+        var projectId = <?php echo $projectId;?>;
 	    var nextDataNumber = 5;
 	    var ajaxLoading = false;
 	    var docNode = jQuery(document);
 	    var ulNode =  jQuery("ul.timeline");
-		    
-	    if(nowProjectEventNum == 0){
-	        jQuery("#fetchNextData").css("display","none");
-	    }
-	    
-	    jQuery('#fetchNextData').click(function() {
-	        if(nowProjectEventNum > 0){
-	            var $this = jQuery(this);
-	            $this.addClass('disabled').text('正在加载后面的数据...');
-	            ajaxLoading = true;
+		var posting = false;
 
-	            jQuery.get(
-	    	            './inc/', 
-	    	            {
+        if (nowProjectEventNum == 0) {
+            jQuery("#fetchNextData").css("display", "none");
+        }
+        jQuery('#fetchNextData').click(function() {
+            if (nowProjectEventNum > 0) {
+            var $this = jQuery(this);
+            $this.text('正在加载后面的数据...');
+            ajaxLoading = true;
 
-		    	            },
-	    	            function(data) {
-	                ajaxLoading = false;
-	                ulNode.append(data);
-	            });
-	        }
+            jQuery.post('./inc/control.php?state=3', {
+                "projectId" : projectId,
+                "lastEventId" : lastEventId,
+                "nextDataNumber" : nextDataNumber,
+                "nowProjectEventNum" : nowProjectEventNum
+            }, function(data) {
+                if (data.code == -1) {
+                jQuery("#fetchNextData").css("display", "none");
+                haveData = false;
+                nowProjectEventNum = 0;
+                } else if (data.code == 0) {
+                lastEventId = data.message.id;
+                nowProjectEventNum = data.message.nowProjectEventNum;
+                if (nowProjectEventNum == 0) {
+                    jQuery("#fetchNextData").css("display", "none");
+                }
+                ulNode.append(data.message.html);
+                $this.text('查看更多');
+                } else {
+                $this.text('加载出错');
+                }
+                ajaxLoading = false;
+            }, "json");
+            }
 
-	    });
+        });
 
-	    docNode.scroll(function() {
-	        if (nowProjectEventNum > 0 && docNode.height() - jQuery(window).height() - docNode.scrollTop() < 150) {
-	            if (!ajaxLoading) {
-	                jQuery('#fetchNextData').click();
-	            }
-	        }
+        docNode
+            .scroll(function() {
+                if (nowProjectEventNum > 0
+                    && docNode.height() - jQuery(window).height()
+                        - docNode.scrollTop() < 150) {
+                if (!ajaxLoading) {
+                    jQuery('#fetchNextData').click();
+                }
+                }
 
-	    });
+            });
+        jQuery('.top-fixed').click(function() {
+            jQuery("#addevent_title").val("");
+            jQuery("#addevent_content").val("")
+            jQuery("#addevent .modal-header h3").html("添加新事件");
+            jQuery("#addevent_titlePre").text("新事件的名称：");
+            jQuery('#addevent').addClass("in");
+            jQuery(".modal-backdrop").addClass("in");
+        });
+        jQuery("#addevent .close").click(function() {
+            if (!posting) {
+            jQuery('#addevent').removeClass("in");
+            jQuery('.modal-backdrop').removeClass("in");
+            }
 
+        });
+        jQuery("#addevent .modal-footer .cancel").click(function() {
+            if (!posting) {
+            jQuery('#addevent').removeClass("in");
+            jQuery('.modal-backdrop').removeClass("in");
+            }
+
+        });
+        jQuery(".modal-backdrop").click(function() {
+            if (!posting) {
+            jQuery('#addevent').removeClass("in");
+            jQuery('.modal-backdrop').removeClass("in");
+            }
+
+        });
+        jQuery("#addevent .modal-footer .ok").click(function() {
+            var title = jQuery("#addevent_title").val();
+            var content = jQuery("#addevent_content").val();
+
+            if (content == "" || title == "") {
+        	    alert("该项目事件的名称或描述不能为空");
+            } else {
+            jQuery('.modal-load').addClass("in");
+            posting = true;
+            jQuery.post("./inc/control.php?state=4", {
+                "projectId" : projectId,
+                "title" : title,
+                "content" : content
+            }, function(d) {
+                posting = false;
+                jQuery('.modal-load').removeClass("in");
+                if (d.code == 0) {
+                    window.location.reload();
+                } else {
+                    alert(d.message);
+                }
+            }, "json");
+            }
+            return false;
+        });
 	});
 
 	</script>
 
-	
+
 </body>
 </html>

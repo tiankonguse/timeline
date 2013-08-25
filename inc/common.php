@@ -7,6 +7,7 @@ require ROOT."/common/inc/common.php";
 
 require BASE_INC . "init.php";
 require BASE_INC . "php_version.php";
+require BASE_INC . "JSON.php";
 
 
 

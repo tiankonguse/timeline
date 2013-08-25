@@ -1,0 +1,20 @@
+CACHE MANIFEST
+
+CACHE:
+
+http://tk.com:8080/common/img/logo.ico
+http://tk.com:8080/common/css/animation.css
+http://tk.com:8080/common/css/main.css
+http://tk.com:8080/common/img/cursors/handcursor.cur
+http://tk.com:8080/common/img/cursors/cursorActive.cur
+http://tk.com:8080/timeline/js/jquery.js
+http://tk.com:8080/timeline/js/jquery.min.map
+
+FALLBACK:
+
+
+
+NETWORK:
+*
+
+

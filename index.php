@@ -6,6 +6,7 @@ require("./inc/common.php");
 <html lang="zh-cn">
 <head>
 <?php
+//manifest="appcache.manifest"
 $title = "tiankonguse's timeline";
 require BASE_INC . 'head.inc.php';
 ?>
@@ -18,7 +19,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
 	$login = false;
 }
 
-if($login || 1){
+if($login){
 	echo "<div class=\"top-fixed\" >添加新项目</div>";
 }
 ?>
@@ -34,7 +35,7 @@ if($login || 1){
             <ul class="item-list">
             <?php
             $dataNumber = 10;
-            $resourceId=@mysql_query("SELECT * FROM timeline_project ORDER BY id limit 0,$dataNumber ",$conn);
+            $resourceId=@mysql_query("SELECT * FROM timeline_project ORDER BY id DESC limit 0,$dataNumber ",$conn);
             while($project=@mysql_fetch_array($resourceId)){
             	$lastProjectId = $projecId = $project['id'];
             	$projectName = $project['name'];
@@ -50,45 +51,56 @@ if($login || 1){
             </ul>
             <div>
                 <button id="fetchNextData" class="btn"
-                    style="width: 100%;"
-                >查看更多</button>
+                    style="width: 100%;">查看更多</button>
             </div>
         </div>
     </section>
     <footer>
     <?php  require BASE_INC . 'footer.inc.php'; ?>
     </footer>
+
     <div id="addevent" class="modal hide">
         <div class="modal-header"
-            style="text-align: center;
-    cursor: move;"
-        >
+            style="text-align: center; cursor: move;">
             <button type="button" class="close">&times;</button>
             <h3>添加新事件</h3>
         </div>
         <div class="modal-body">
             <p>
-                <span id="titlePre">sssss</span> <input id="title"
-                    type="text" class="longtext"
-                >
+                <span id="addevent_titlePre">sssss</span> <input
+                    id="addevent_title" type="text" class="longtext">
             </p>
             <p>
                 请输入 描述：
-                <textarea id="content"
-                    style="width: 100%;
-    height: 200px;"
-                ></textarea>
+                <textarea id="addevent_content"
+                    style="width: 100%; height: 200px;"></textarea>
             </p>
         </div>
         <div class="modal-footer">
             <button class="btn cancel">取消</button>
-            <button class="btn btn-primary" onclick="">确认</button>
+            <button class="btn btn-primary ok">确认</button>
         </div>
     </div>
+
     <div class="modal-backdrop hide"></div>
+    <div class="modal-load hide">
+        <div class="modal-load-img">
+            正在努力加载中。。。 <img
+                src="<?php echo MAIN_DOMAIN;?>img/loading.gif"
+                style="height: 30px;" />
+        </div>
+    </div>
     <script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
     <script>
+
     jQuery(function() {
+
+        <?php 
+            if(isset($_GET["message"])){
+            	echo "alert(\"{$_GET["message"]}\")";
+            }
+        ?>
+        
         var lastProjectId        = <?php echo $lastProjectId;?>;
         var nextDataNumber = 5;
         var ajaxLoading = false;
@@ -114,7 +126,6 @@ if($login || 1){
                 		    haveData = false;
                 		}else if(data.code == 0){
                 			    lastProjectId = data.message.id;
-                			    console.log(lastProjectId);
                 			    ulNode.append(data.message.html);
                 			    $this.text('查看更多');
                         }else{
@@ -133,30 +144,50 @@ if($login || 1){
             }
         });
 
-        $('.top-fixed').click(function(){
-            $("#title").val("");
-            $("#content").val("")
-            $("#addevent .modal-header h3").html("添加新项目");
-            $("#titlePre").text("新项目的名称：");
-            $("#addevent .modal-footer button.btn-primary").click(function(){
-
-            });
-            $('#addevent').addClass("in");
-            $(".modal-backdrop").addClass("in");
+        jQuery('.top-fixed').click(function(){
+            jQuery("#addevent_title").val("");
+            jQuery("#addevent_content").val("")
+            jQuery("#addevent .modal-header h3").html("添加新项目");
+            jQuery("#addevent_titlePre").text("新项目的名称：");
+            jQuery('#addevent').addClass("in");
+            jQuery(".modal-backdrop").addClass("in");
         });
-        $("#addevent .close").click(function(){
-            $('#addevent').removeClass("in");
-            $('.modal-backdrop').removeClass("in");
+        
+        jQuery("#addevent .close").click(function(){
+            jQuery('#addevent').removeClass("in");
+            jQuery('.modal-backdrop').removeClass("in");
         });
-        $("#addevent .modal-footer .cancel").click(function(){
-            $('#addevent').removeClass("in");
-            $('.modal-backdrop').removeClass("in");
+        jQuery("#addevent .modal-footer .cancel").click(function(){
+            jQuery('#addevent').removeClass("in");
+            jQuery('.modal-backdrop').removeClass("in");
         });
-        $(".modal-backdrop").click(function(){
-            $('#addevent').removeClass("in");
-            $('.modal-backdrop').removeClass("in");
+        jQuery(".modal-backdrop").click(function(){
+            jQuery('#addevent').removeClass("in");
+            jQuery('.modal-backdrop').removeClass("in");
         });
 
+        jQuery("#addevent .modal-footer .ok").click(function(){
+            var title = jQuery("#addevent_title").val();
+            var content = jQuery("#addevent_content").val();
+            
+            if(content == "" || title == ""){
+                alert("Project名称或描述为空");
+            }else{
+                jQuery('.modal-load').addClass("in");
+                jQuery.post("./inc/control.php?state=2",{
+                    "title":title,
+                    "content":content
+                },function(d){
+                    jQuery('.modal-load').removeClass("in");
+                    if(d.code == 0){
+                	   window.location.reload();
+                    }else{
+                        alert(d.message);
+                    }
+                },"json");
+            }
+            return false;
+        });
     });
 
     </script>
