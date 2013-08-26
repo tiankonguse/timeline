@@ -41,7 +41,7 @@ if($login){
             	$projectName = $project['name'];
             	echo "
 			      <li>
-                <a target=\"_blank\" href=\"".MAIN_DOMAIN."timeline.php?id=".$projecId."\"> 
+                <a href=\"".MAIN_DOMAIN."timeline.php?id=".$projecId."\"> 
                 $projectName
                 </a>
                 </li>
