@@ -191,7 +191,7 @@ if($login){
                 }
 
             });
-        jQuery('.top-fixed').click(function() {
+        jQuery('.top2-fixed').click(function() {
             jQuery("#addevent_title").val("");
             jQuery("#addevent_content").val("")
             jQuery("#addevent .modal-header h3").html("添加新事件");
