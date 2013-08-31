@@ -6,7 +6,6 @@ require("./inc/common.php");
 <html lang="zh-cn">
 <head>
 <?php
-//manifest="appcache.manifest"
 $title = "tiankonguse's timeline";
 require BASE_INC . 'head.inc.php';
 ?>
@@ -20,7 +19,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
 }
 
 if($login){
-	echo "<div class=\"top-fixed\" >添加新项目</div>";
+	echo "<div class=\"top-fixed handcursor\" >添加新项目</div>";
 }
 ?>
 

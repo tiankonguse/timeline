@@ -44,9 +44,9 @@ $login = true;
 if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
 	$login = false;
 }
-echo "<a href=\"".MAIN_DOMAIN."\"><div class=\"top-fixed \" >项目列表</div></a>";
+echo "<a href=\"".MAIN_DOMAIN."\" ><div class=\"top-fixed handcursor\" >项目列表</div></a>";
 if($login){
-	echo "<div class=\"top-fixed top2-fixed\" >添加新活动</div>";
+	echo "<div class=\"top-fixed top2-fixed handcursor\" >添加新活动</div>";
 }
 ?>
     <header>
