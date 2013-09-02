@@ -57,16 +57,15 @@ if($login){
     <footer>
     <?php  require BASE_INC . 'footer.inc.php'; ?>
     </footer>
-
-    <div id="addevent" class="modal hide">
+    <div id="addevent" class="modal hide modal-transition">
         <div class="modal-header"
             style="text-align: center; cursor: move;">
             <button type="button" class="close">&times;</button>
-            <h3>添加新事件</h3>
+            <h3>添加新项目</h3>
         </div>
         <div class="modal-body">
             <p>
-                <span id="addevent_titlePre">sssss</span> <input
+                <span id="addevent_titlePre">新项目的名称:</span> <input
                     id="addevent_title" type="text" class="longtext">
             </p>
             <p>
@@ -80,16 +79,16 @@ if($login){
             <button class="btn btn-primary ok">确认</button>
         </div>
     </div>
-
-    <div class="modal-backdrop hide"></div>
-    <div class="modal-load hide">
+    
+    
+    <div class="modal-load hide modal-transition">
         <div class="modal-load-img">
             正在努力加载中。。。 <img
                 src="<?php echo MAIN_DOMAIN;?>img/loading.gif"
                 style="height: 30px;" />
         </div>
     </div>
-    <script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
+    <script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
     <script>
 
     jQuery(function() {
@@ -145,9 +144,7 @@ if($login){
 
         jQuery('.top-fixed').click(function(){
             jQuery("#addevent_title").val("");
-            jQuery("#addevent_content").val("")
-            jQuery("#addevent .modal-header h3").html("添加新项目");
-            jQuery("#addevent_titlePre").text("新项目的名称：");
+            jQuery("#addevent_content").val("");
             jQuery('#addevent').addClass("in");
             jQuery(".modal-backdrop").addClass("in");
         });

@@ -50,17 +50,17 @@ if($login){
 }
 ?>
     <header>
-    
+
         <div class="title">
             <a
                 href="<?php echo MAIN_DOMAIN."timeline.php?id=".$projectId;?>"><?php echo $title; ?>
             </a>
-            <div class="sub-title">
-            <?php echo $projectDescription; ?>
-            </div>
         </div>
     </header>
     <section>
+        <div class="title sub-title">
+        <?php echo $projectDescription; ?>
+        </div>
         <div class="container">
             <ul class="timeline">
             <?php
@@ -83,7 +83,7 @@ if($login){
                     <div class=\"content\">
                         <article>
                         <div class=\"timeline-title\">{$projectEventTitle}</div>
-                        <div>{$projectEventContent}</div>
+                        <div><pre>{$projectEventContent}</pre></div>
                         </article>
                     </div>
                 </li>
@@ -110,7 +110,7 @@ if($login){
         </div>
         <div class="modal-body">
             <p>
-                <span id="addevent_titlePre">sssss</span> <input
+                <span id="addevent_titlePre">新事件的名称：</span> <input
                     id="addevent_title" type="text" class="longtext">
             </p>
             <p>
@@ -124,7 +124,6 @@ if($login){
             <button class="btn btn-primary ok">确认</button>
         </div>
     </div>
-    <div class="modal-backdrop hide"></div>
     <div class="modal-load hide">
         <div class="modal-load-img">
             正在努力加载中。。。 <img
@@ -132,7 +131,7 @@ if($login){
                 style="height: 30px;" />
         </div>
     </div>
-    <script src="<?php echo MAIN_DOMAIN;?>js/jquery.js"></script>
+    <script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
     <script>
 	jQuery(function() {
         var nowProjectEventNum = <?php echo $projectEventNum;?>;
@@ -193,9 +192,7 @@ if($login){
             });
         jQuery('.top2-fixed').click(function() {
             jQuery("#addevent_title").val("");
-            jQuery("#addevent_content").val("")
-            jQuery("#addevent .modal-header h3").html("添加新事件");
-            jQuery("#addevent_titlePre").text("新事件的名称：");
+            jQuery("#addevent_content").val("");
             jQuery('#addevent').addClass("in");
             jQuery(".modal-backdrop").addClass("in");
         });
