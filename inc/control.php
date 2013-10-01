@@ -3,7 +3,7 @@ session_start();
 require("./common.php");
 
 $json = new Services_JSON();
-require("function.php");
+require("./function.php");
 
 if((!$conn || !$result) && $ret){
 	// db error

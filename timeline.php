@@ -99,9 +99,8 @@ if($login){
             </div>
         </div>
     </section>
-    <footer>
-    <?php  require BASE_INC . 'footer.inc.php'; ?>
-    </footer>
+
+    <div class="addevent modal-backdrop hide"></div>
     <div id="addevent" class="modal hide">
         <div class="modal-header"
             style="text-align: center; cursor: move;">
@@ -132,118 +131,125 @@ if($login){
         </div>
     </div>
     <script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
+    <script src="<?php echo DOMAIN_JS;?>main.js"></script>
+    <footer>
+    <?php  require BASE_INC . 'footer.inc.php'; ?>
+    </footer>
     <script>
-	jQuery(function() {
-        var nowProjectEventNum = <?php echo $projectEventNum;?>;
-        var lastEventId        = <?php echo $lastEventId;?>;
-        var projectId = <?php echo $projectId;?>;
-	    var nextDataNumber = 5;
-	    var ajaxLoading = false;
-	    var docNode = jQuery(document);
-	    var ulNode =  jQuery("ul.timeline");
-		var posting = false;
 
-        if (nowProjectEventNum == 0) {
-            jQuery("#fetchNextData").css("display", "none");
-        }
-        jQuery('#fetchNextData').click(function() {
-            if (nowProjectEventNum > 0) {
-            var $this = jQuery(this);
-            $this.text('正在加载后面的数据...');
-            ajaxLoading = true;
+    jQuery(document).ready(function() {
+           var nowProjectEventNum = <?php echo $projectEventNum;?>;
+            var lastEventId        = <?php echo $lastEventId;?>;
+            var projectId = <?php echo $projectId;?>;
+            var nextDataNumber = 5;
+            var ajaxLoading = false;
+            var docNode = jQuery(document);
+            var ulNode =  jQuery("ul.timeline");
+            var posting = false;
 
-            jQuery.post('./inc/control.php?state=3', {
-                "projectId" : projectId,
-                "lastEventId" : lastEventId,
-                "nextDataNumber" : nextDataNumber,
-                "nowProjectEventNum" : nowProjectEventNum
-            }, function(data) {
-                if (data.code == -1) {
+            if (nowProjectEventNum == 0) {
                 jQuery("#fetchNextData").css("display", "none");
-                haveData = false;
-                nowProjectEventNum = 0;
-                } else if (data.code == 0) {
-                lastEventId = data.message.id;
-                nowProjectEventNum = data.message.nowProjectEventNum;
-                if (nowProjectEventNum == 0) {
-                    jQuery("#fetchNextData").css("display", "none");
-                }
-                ulNode.append(data.message.html);
-                $this.text('查看更多');
-                } else {
-                $this.text('加载出错');
-                }
-                ajaxLoading = false;
-            }, "json");
             }
+            jQuery('#fetchNextData').click(function() {
+                if (nowProjectEventNum > 0) {
+                var $this = jQuery(this);
+                $this.text('正在加载后面的数据...');
+                ajaxLoading = true;
 
-        });
-
-        docNode
-            .scroll(function() {
-                if (nowProjectEventNum > 0
-                    && docNode.height() - jQuery(window).height()
-                        - docNode.scrollTop() < 150) {
-                if (!ajaxLoading) {
-                    jQuery('#fetchNextData').click();
-                }
+                jQuery.post('./inc/control.php?state=3', {
+                    "projectId" : projectId,
+                    "lastEventId" : lastEventId,
+                    "nextDataNumber" : nextDataNumber,
+                    "nowProjectEventNum" : nowProjectEventNum
+                }, function(data) {
+                    if (data.code == -1) {
+                    jQuery("#fetchNextData").css("display", "none");
+                    haveData = false;
+                    nowProjectEventNum = 0;
+                    } else if (data.code == 0) {
+                    lastEventId = data.message.id;
+                    nowProjectEventNum = data.message.nowProjectEventNum;
+                    if (nowProjectEventNum == 0) {
+                        jQuery("#fetchNextData").css("display", "none");
+                    }
+                    ulNode.append(data.message.html);
+                    $this.text('查看更多');
+                    } else {
+                    $this.text('加载出错');
+                    }
+                    ajaxLoading = false;
+                }, "json");
                 }
 
             });
+
+            docNode
+                .scroll(function() {
+                    if (nowProjectEventNum > 0
+                        && docNode.height() - jQuery(window).height()
+                            - docNode.scrollTop() < 150) {
+                    if (!ajaxLoading) {
+                        jQuery('#fetchNextData').click();
+                    }
+                    }
+
+                });
+
+        
+        var $addevent = jQuery('#addevent');
+        var $addevent_title = jQuery("#addevent_title");
+        var $addevent_content = jQuery("#addevent_content");        
+        var $addevent_close = jQuery("#addevent .close");
+        var $addevent_cancel = jQuery("#addevent .cancel");
+        var $addevent_ok = jQuery("#addevent .ok");
+        var $addevent_modal_backdrop = jQuery(".addevent.modal-backdrop");
+        
         jQuery('.top2-fixed').click(function() {
-            jQuery("#addevent_title").val("");
-            jQuery("#addevent_content").val("");
-            jQuery('#addevent').addClass("in");
-            jQuery(".modal-backdrop").addClass("in");
+            $addevent_title.val("");
+            $addevent_content.val("");
+            $addevent.addClass("in");
+            $addevent_modal_backdrop.addClass("in");
         });
-        jQuery("#addevent .close").click(function() {
+        $addevent_close.click(function() {
             if (!posting) {
-            jQuery('#addevent').removeClass("in");
-            jQuery('.modal-backdrop').removeClass("in");
+	        	$addevent.removeClass("in");
+	        	$addevent_modal_backdrop.removeClass("in");
             }
 
         });
-        jQuery("#addevent .modal-footer .cancel").click(function() {
+        $addevent_cancel.click(function() {
             if (!posting) {
-            jQuery('#addevent').removeClass("in");
-            jQuery('.modal-backdrop').removeClass("in");
+                $addevent.removeClass("in");
+                $addevent_modal_backdrop.removeClass("in");
             }
-
         });
-        jQuery(".modal-backdrop").click(function() {
-            if (!posting) {
-            jQuery('#addevent').removeClass("in");
-            jQuery('.modal-backdrop').removeClass("in");
-            }
 
-        });
-        jQuery("#addevent .modal-footer .ok").click(function() {
-            var title = jQuery("#addevent_title").val();
-            var content = jQuery("#addevent_content").val();
+        $addevent_ok.click(function() {
+            var title = $addevent_title.val();
+            var content = $addevent_content.val();
 
             if (content == "" || title == "") {
-        	    alert("该项目事件的名称或描述不能为空");
+        	showMessage("该项目事件的名称或描述不能为空");
             } else {
-            jQuery('.modal-load').addClass("in");
-            posting = true;
-            jQuery.post("./inc/control.php?state=4", {
-                "projectId" : projectId,
-                "title" : title,
-                "content" : content
-            }, function(d) {
-                posting = false;
-                jQuery('.modal-load').removeClass("in");
-                if (d.code == 0) {
-                    window.location.reload();
-                } else {
-                    alert(d.message);
-                }
-            }, "json");
+	            jQuery('.modal-load').addClass("in");
+	            posting = true;
+	            jQuery.post("./inc/control.php?state=4", {
+	                "projectId" : projectId,
+	                "title" : title,
+	                "content" : content
+	            }, function(d) {
+	                posting = false;
+	                jQuery('.modal-load').removeClass("in");
+	                if (d.code == 0) {
+	                    window.location.reload();
+	                } else {
+	                    showMessage(d.message);
+	                }
+	            }, "json");
             }
             return false;
         });
-	});
-
+    });
 	</script>
 
 

@@ -147,9 +147,9 @@ function addProject(){
 
 function addProjectEvent(){
 	global $conn;
-    if(!loginCheck()){
-        return output(OUTPUT_ERROR,"请先登录在操作");
-    }
+	if(!loginCheck()){
+		return output(OUTPUT_ERROR,"请先登录在操作");
+	}
 	if(isset($_POST['title']) && isset($_POST['content']) && isset($_POST['projectId'])){
 		$title = $_POST['title'];
 		$content = $_POST['content'];

@@ -54,16 +54,18 @@ if($login){
             </div>
         </div>
     </section>
-    <footer>
-    <?php  require BASE_INC . 'footer.inc.php'; ?>
-    </footer>
+
+
+    <div class="addevent modal-backdrop hide"></div>
     <div id="addevent" class="modal hide modal-transition">
+
         <div class="modal-header"
             style="text-align: center; cursor: move;">
             <button type="button" class="close">&times;</button>
             <h3>添加新项目</h3>
         </div>
         <div class="modal-body">
+
             <p>
                 <span id="addevent_titlePre">新项目的名称:</span> <input
                     id="addevent_title" type="text" class="longtext">
@@ -78,9 +80,9 @@ if($login){
             <button class="btn cancel">取消</button>
             <button class="btn btn-primary ok">确认</button>
         </div>
+
     </div>
-    
-    
+
     <div class="modal-load hide modal-transition">
         <div class="modal-load-img">
             正在努力加载中。。。 <img
@@ -89,16 +91,16 @@ if($login){
         </div>
     </div>
     <script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
+    <script src="<?php echo DOMAIN_JS;?>main.js"></script>
+    <footer>
+    <?php  require BASE_INC . 'footer.inc.php'; ?>
+    </footer>
+
+
+
     <script>
 
     jQuery(function() {
-
-        <?php 
-            if(isset($_GET["message"])){
-            	echo "alert(\"{$_GET["message"]}\")";
-            }
-        ?>
-        
         var lastProjectId        = <?php echo $lastProjectId;?>;
         var nextDataNumber = 5;
         var ajaxLoading = false;
@@ -141,33 +143,45 @@ if($login){
                 }
             }
         });
+    });
 
+    jQuery(document).ready(function() {
+        var $addevent = jQuery('#addevent');
+        var $addevent_title = jQuery("#addevent_title");
+        var $addevent_content = jQuery("#addevent_content");        
+        var $addevent_close = jQuery("#addevent .close");
+        var $addevent_cancel = jQuery("#addevent .cancel");
+        var $addevent_ok = jQuery("#addevent .ok");
+        var $addevent_modal_backdrop = jQuery(".addevent.modal-backdrop");
+
+        
         jQuery('.top-fixed').click(function(){
-            jQuery("#addevent_title").val("");
-            jQuery("#addevent_content").val("");
-            jQuery('#addevent').addClass("in");
-            jQuery(".modal-backdrop").addClass("in");
+            $addevent_title.val("");
+            $addevent_content.val("");
+            $addevent.addClass("in");
+            $addevent_modal_backdrop.addClass("in");
+        });
+
+        
+        $addevent_close.click(function() {
+            $addevent.removeClass("in");
+            $addevent_modal_backdrop.removeClass("in");
         });
         
-        jQuery("#addevent .close").click(function(){
-            jQuery('#addevent').removeClass("in");
-            jQuery('.modal-backdrop').removeClass("in");
-        });
-        jQuery("#addevent .modal-footer .cancel").click(function(){
-            jQuery('#addevent').removeClass("in");
-            jQuery('.modal-backdrop').removeClass("in");
-        });
-        jQuery(".modal-backdrop").click(function(){
-            jQuery('#addevent').removeClass("in");
-            jQuery('.modal-backdrop').removeClass("in");
+        $addevent_cancel.click(function() {
+            $addevent.removeClass("in");
+            $addevent_modal_backdrop.removeClass("in");
         });
 
-        jQuery("#addevent .modal-footer .ok").click(function(){
-            var title = jQuery("#addevent_title").val();
-            var content = jQuery("#addevent_content").val();
+
+
+        
+        $addevent_ok.click(function(){
+            var title = $addevent_title.val();
+            var content = $addevent_content.val();
             
             if(content == "" || title == ""){
-                alert("Project名称或描述为空");
+        	   showMessage("Project名称或描述为空");
             }else{
                 jQuery('.modal-load').addClass("in");
                 jQuery.post("./inc/control.php?state=2",{
@@ -176,16 +190,24 @@ if($login){
                 },function(d){
                     jQuery('.modal-load').removeClass("in");
                     if(d.code == 0){
-                	   window.location.reload();
+                       window.location.reload();
                     }else{
-                        alert(d.message);
+                	   showMessage(d.message);
                     }
                 },"json");
             }
             return false;
         });
+        
     });
-
+    
+    jQuery(function() {
+        <?php 
+         if(isset($_GET["message"])){
+            echo "showMessage(\"{$_GET["message"]}\")";
+         }
+       ?>
+	 });
     </script>
 
 </body>
