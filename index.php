@@ -1,6 +1,6 @@
 <?php
-session_start();
-require("./inc/common.php");
+session_start ();
+require ("./inc/common.php");
 ?>
 <!DOCTYPE HTML>
 <html lang="zh-cn">
@@ -14,33 +14,33 @@ require BASE_INC . 'head.inc.php';
 <body>
 <?php
 $login = true;
-if(!isset($_SESSION["username"]) || $_SESSION["username"]==""){
-	$login = false;
+if (! isset ( $_SESSION ["username"] ) || $_SESSION ["username"] == "") {
+    $login = false;
 }
 
-if($login){
-	echo "<div class=\"top-fixed handcursor\" >添加新项目</div>";
+if ($login) {
+    echo "<div class=\"top-fixed handcursor\" >添加新项目</div>";
 }
 ?>
 
     <header>
-        <div class="title">
-            <a href="<?php echo MAIN_DOMAIN;?>"><?php echo $title; ?> </a>
-            <div class="sub-title">记录下自己项目的足迹。</div>
-        </div>
-    </header>
-    <section>
-        <div class="container">
-            <ul class="item-list">
+		<div class="title">
+			<a href="<?php echo MAIN_DOMAIN;?>"><?php echo $title; ?> </a>
+			<div class="sub-title">记录下自己项目的足迹。</div>
+		</div>
+	</header>
+	<section>
+		<div class="container">
+			<ul class="item-list">
             <?php
             $dataNumber = 10;
-            $resourceId=@mysql_query("SELECT * FROM timeline_project ORDER BY id DESC limit 0,$dataNumber ",$conn);
-            while($project=@mysql_fetch_array($resourceId)){
-            	$lastProjectId = $projecId = $project['id'];
-            	$projectName = $project['name'];
-            	echo "
+            $resourceId = @mysql_query ( "SELECT * FROM timeline_project ORDER BY id DESC limit 0,$dataNumber ", $conn );
+            while ( $project = @mysql_fetch_array ( $resourceId ) ) {
+                $lastProjectId = $projecId = $project ['id'];
+                $projectName = $project ['name'];
+                echo "
 			      <li>
-                <a href=\"".MAIN_DOMAIN."timeline.php?id=".$projecId."\"> 
+                <a href=\"" . MAIN_DOMAIN . "timeline.php?id=" . $projecId . "\"> 
                 $projectName
                 </a>
                 </li>
@@ -48,60 +48,57 @@ if($login){
             }
             ?>
             </ul>
-            <div>
-                <button id="fetchNextData" class="btn"
-                    style="width: 100%;">查看更多</button>
-            </div>
-        </div>
-    </section>
+			<div>
+				<button id="fetchNextData" class="btn" style="width: 100%;">查看更多</button>
+			</div>
+		</div>
+	</section>
 
 
-    <div class="addevent modal-backdrop hide"></div>
-    <div id="addevent" class="modal hide modal-transition">
+	<div class="addevent modal-backdrop hide"></div>
+	<div id="addevent" class="modal hide modal-transition">
 
-        <div class="modal-header"
-            style="text-align: center; cursor: move;">
-            <button type="button" class="close">&times;</button>
-            <h3>添加新项目</h3>
-        </div>
-        <div class="modal-body">
+		<div class="modal-header" style="text-align: center; cursor: move;">
+			<button type="button" class="close">&times;</button>
+			<h3>添加新项目</h3>
+		</div>
+		<div class="modal-body">
 
-            <p>
-                <span id="addevent_titlePre">新项目的名称:</span> <input
-                    id="addevent_title" type="text" class="longtext">
-            </p>
-            <p>
-                请输入 描述：
-                <textarea id="addevent_content"
-                    style="width: 100%; height: 200px;"></textarea>
-            </p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn cancel">取消</button>
-            <button class="btn btn-primary ok">确认</button>
-        </div>
+			<p>
+				<span id="addevent_titlePre">新项目的名称:</span> <input
+					id="addevent_title" type="text" class="longtext">
+			</p>
+			<p>
+				请输入 描述：
+				<textarea id="addevent_content" style="width: 100%; height: 200px;"></textarea>
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn cancel">取消</button>
+			<button class="btn btn-primary ok">确认</button>
+		</div>
 
-    </div>
+	</div>
 
-    <div class="modal-load hide modal-transition">
-        <div class="modal-load-img">
-            正在努力加载中。。。 <img
-                src="<?php echo MAIN_DOMAIN;?>img/loading.gif"
-                style="height: 30px;" />
-        </div>
-    </div>
-    <script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
-    <script src="<?php echo DOMAIN_JS;?>main.js"></script>
-    <footer>
+	<div class="modal-load hide modal-transition">
+		<div class="modal-load-img">
+			正在努力加载中。。。 <img src="<?php echo MAIN_DOMAIN;?>img/loading.gif"
+				style="height: 30px;" />
+		</div>
+	</div>
+	
+	<script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
+	<script src="<?php echo DOMAIN_JS;?>main.js"></script>
+	<footer>
     <?php  require BASE_INC . 'footer.inc.php'; ?>
     </footer>
 
 
 
-    <script>
+	<script>
 
     jQuery(function() {
-        var lastProjectId        = <?php echo $lastProjectId;?>;
+        var lastProjectId        = <?php echo $lastProjectId || -1;?>;
         var nextDataNumber = 5;
         var ajaxLoading = false;
         var docNode = jQuery(document);
@@ -202,11 +199,11 @@ if($login){
     });
     
     jQuery(function() {
-        <?php 
-         if(isset($_GET["message"])){
+        <?php
+        if (isset ( $_GET ["message"] )) {
             echo "showMessage(\"{$_GET["message"]}\")";
-         }
-       ?>
+        }
+        ?>
 	 });
     </script>
 
