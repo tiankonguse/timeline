@@ -96,9 +96,13 @@ if ($login) {
 
 
 	<script>
-
+<?php  
+    if($lastProjectId == ""){
+        $lastProjectId = -1;
+    }
+?>
     jQuery(function() {
-        var lastProjectId        = <?php echo $lastProjectId || -1;?>;
+        var lastProjectId        = <?php echo $lastProjectId ?>;
         var nextDataNumber = 5;
         var ajaxLoading = false;
         var docNode = jQuery(document);
