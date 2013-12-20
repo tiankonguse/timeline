@@ -141,6 +141,9 @@ function addProject() {
         return output ( OUTPUT_ERROR, "非法操作" );
     }
 }
+
+
+
 function addProjectEvent() {
     global $conn;
     if (! loginCheck ()) {
@@ -170,4 +173,34 @@ function addProjectEvent() {
     } else {
         return output ( OUTPUT_ERROR, "非法操作" );
     }
+}
+
+function alterProjectEvent(){
+	global $conn;
+	if (! loginCheck ()) {
+		return output ( OUTPUT_ERROR, "请先登录在操作" );
+	}
+	if (isset ( $_POST ['title'] ) && isset ( $_POST ['content'] ) && isset ( $_POST ['id'] )) {
+		$title = $_POST ['title'];
+		$content = $_POST ['content'];
+		$id = intval ( $_POST ['id'] );
+		// 检查表单数据
+		if (strcmp ( $title, "" ) == 0 || strcmp ( $content, "" ) == 0) {
+			return output ( OUTPUT_ERROR, "表单填写不完整" );
+		}
+
+		// 添加新content
+		$title = mysql_real_escape_string ( $title );
+		$content = mysql_real_escape_string ( $content );
+
+		$sql = "UPDATE `timeline_event` SET `title`='$title',`content`='$content' WHERE id = $id";
+
+		if (! @mysql_query ( $sql, $conn )) {
+			return output ( OUTPUT_ERROR, "数据库操作失败，请联系管理员" );
+		}
+
+		return output ( 0, "事件修改成功" );
+	} else {
+		return output ( OUTPUT_ERROR, "非法操作" );
+	}
 }

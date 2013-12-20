@@ -19,6 +19,7 @@ if((!$conn || !$result) && $ret){
 		case 2 :echo $json->encode(addProject());break;
 		case 3 :echo $json->encode(loadProjectEvent());break;
 		case 4 :echo $json->encode(addProjectEvent());break;
+		case 5 :echo $json->encode(alterProjectEvent());break;
 	}
 }
 

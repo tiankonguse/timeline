@@ -12,18 +12,18 @@ require BASE_INC . 'head.inc.php';
 <link href="<?php echo MAIN_DOMAIN;?>css/main.css" rel="stylesheet">
 </head>
 <body>
-<?php
-$login = true;
-if (! isset ( $_SESSION ["username"] ) || $_SESSION ["username"] == "") {
-    $login = false;
-}
+	<?php
+	$login = true;
+	if (! isset ( $_SESSION ["username"] ) || strcmp($_SESSION ["username"],"") == 0) {
+    	$login = false;
+	}
 
 if ($login) {
     echo "<div class=\"top-fixed handcursor\" >添加新项目</div>";
 }
 ?>
 
-    <header>
+	<header>
 		<div class="title">
 			<a href="<?php echo MAIN_DOMAIN;?>"><?php echo $title; ?> </a>
 			<div class="sub-title">记录下自己项目的足迹。</div>
@@ -32,22 +32,22 @@ if ($login) {
 	<section>
 		<div class="container">
 			<ul class="item-list">
-            <?php
-            $dataNumber = 10;
-            $resourceId = @mysql_query ( "SELECT * FROM timeline_project ORDER BY id DESC limit 0,$dataNumber ", $conn );
-            while ( $project = @mysql_fetch_array ( $resourceId ) ) {
+				<?php
+				$dataNumber = 10;
+				$resourceId = mysql_query ( "SELECT * FROM timeline_project ORDER BY id DESC limit 0,$dataNumber ", $conn );
+				while ( $project = mysql_fetch_array ( $resourceId ) ) {
                 $lastProjectId = $projecId = $project ['id'];
                 $projectName = $project ['name'];
                 echo "
-			      <li>
-                <a href=\"" . MAIN_DOMAIN . "timeline.php?id=" . $projecId . "\"> 
-                $projectName
-                </a>
-                </li>
-			     ";
+			<li>
+			<a href=\"" . MAIN_DOMAIN . "timeline.php?id=" . $projecId . "\">
+			$projectName
+			</a>
+			</li>
+			";
             }
             ?>
-            </ul>
+			</ul>
 			<div>
 				<button id="fetchNextData" class="btn" style="width: 100%;">查看更多</button>
 			</div>
@@ -86,12 +86,12 @@ if ($login) {
 				style="height: 30px;" />
 		</div>
 	</div>
-	
+
 	<script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
 	<script src="<?php echo DOMAIN_JS;?>main.js"></script>
 	<footer>
-    <?php  require BASE_INC . 'footer.inc.php'; ?>
-    </footer>
+		<?php  require BASE_INC . 'footer.inc.php'; ?>
+	</footer>
 
 
 
