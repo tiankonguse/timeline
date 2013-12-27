@@ -179,12 +179,12 @@ require BASE_INC . 'head.inc.php';
                     "nowProjectEventNum" : nowProjectEventNum
                 }, function(data) {
                     if (data.code == -1) {
-                    jQuery("#fetchNextData").css("display", "none");
-                    haveData = false;
-                    nowProjectEventNum = 0;
+                    	jQuery("#fetchNextData").css("display", "none");
+                    	haveData = false;
+                    	nowProjectEventNum = 0;
                     } else if (data.code == 0) {
-                    lastEventId = data.message.id;
-                    nowProjectEventNum = data.message.nowProjectEventNum;
+                    	lastEventId = data.message.id || data.message.lastEventId;
+                    	nowProjectEventNum = data.message.nowProjectEventNum;
                     if (nowProjectEventNum == 0) {
                         jQuery("#fetchNextData").css("display", "none");
                     }
