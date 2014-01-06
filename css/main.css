@@ -1,6 +1,6 @@
 ul.timeline {
     list-style-type: none;
-    background: url("../img/version_line.png") repeat-y scroll 120px 0
+    background: url("/timeline/img/version_line.png") repeat-y scroll 120px 0
         transparent;
     margin: 50px 50px;
     padding: 0;
@@ -34,7 +34,7 @@ ul.timeline li .time {
 
 ul.timeline li .number {
     position: absolute;
-    background: url("../img/version_dot.png") no-repeat scroll 0 0
+    background: url("/timeline/img/version_dot.png") no-repeat scroll 0 0
         transparent;
     width: 56px;
     height: 56px;
@@ -46,7 +46,7 @@ ul.timeline li .number {
 }
 
 ul.timeline li.alt .number {
-    background-image: url("../img/version_dot_alt.png");
+    background-image: url("/timeline/img/version_dot_alt.png");
 }
 
 ul.timeline li .content {

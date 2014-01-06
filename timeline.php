@@ -36,7 +36,10 @@ $projectEventNum = $_projectEventNum["num"];
 $title = $projectName;
 require BASE_INC . 'head.inc.php';
 ?>
-<link href="<?php echo MAIN_DOMAIN;?>css/main.css" rel="stylesheet">
+<script type="text/javascript">
+TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/main.css"});
+</script>
+
 </head>
 <body>
 	<?php
@@ -130,7 +133,8 @@ require BASE_INC . 'head.inc.php';
 			</p>
 			<p>
 				请输入 描述：
-				<textarea id="alterEvent_content" style="width: 100%; height: 200px;"></textarea>
+				<textarea id="alterEvent_content"
+					style="width: 100%; height: 200px;"></textarea>
 			</p>
 		</div>
 		<div class="modal-footer">
@@ -139,15 +143,16 @@ require BASE_INC . 'head.inc.php';
 		</div>
 		<input type="hidden" value="" id="alterEventId">
 	</div>
-	
+
 	<div class="modal-load hide">
 		<div class="modal-load-img">
 			正在努力加载中。。。 <img src="<?php echo MAIN_DOMAIN;?>img/loading.gif"
 				style="height: 30px;" />
 		</div>
 	</div>
-	<script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
-	<script src="<?php echo DOMAIN_JS;?>main.js"></script>
+	<script>
+	TK.loader.loadJS({url:"<?php echo PATH_JS;?>main.js"});
+	</script>
 	<footer>
 		<?php  require BASE_INC . 'footer.inc.php'; ?>
 	</footer>
@@ -328,13 +333,6 @@ require BASE_INC . 'head.inc.php';
             return false;
         });
     });
-
-
-
-
-    
 	</script>
-
-
 </body>
 </html>

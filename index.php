@@ -9,7 +9,10 @@ require ("./inc/common.php");
 $title = "tiankonguse's timeline";
 require BASE_INC . 'head.inc.php';
 ?>
-<link href="<?php echo MAIN_DOMAIN;?>css/main.css" rel="stylesheet">
+<script type="text/javascript">
+TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/main.css"});
+</script>
+
 </head>
 <body>
 	<?php
@@ -86,15 +89,12 @@ if ($login) {
 				style="height: 30px;" />
 		</div>
 	</div>
-
-	<script src="<?php echo DOMAIN_JS;?>jquery.js"></script>
-	<script src="<?php echo DOMAIN_JS;?>main.js"></script>
+	<script>
+	TK.loader.loadJS({url:"<?php echo PATH_JS;?>main.js"});
+	</script>
 	<footer>
 		<?php  require BASE_INC . 'footer.inc.php'; ?>
 	</footer>
-
-
-
 	<script>
 <?php  
     if($lastProjectId == ""){
