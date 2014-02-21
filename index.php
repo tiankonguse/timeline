@@ -20,6 +20,11 @@ TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/main.css"});
 	if (! isset ( $_SESSION ["username"] ) || strcmp($_SESSION ["username"],"") == 0) {
     	$login = false;
 	}
+	
+	if(isset($_SESSION['record_admin']) && strcmp($_SESSION['record_admin'], "record_admin") == 0){
+		$login = true;
+	}
+	
 
 if ($login) {
     echo "<div class=\"top-fixed handcursor\" >添加新项目</div>";

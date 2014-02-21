@@ -47,6 +47,11 @@ TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/main.css"});
 	if (! isset ( $_SESSION ["username"] ) || strcmp($_SESSION ["username"],"") == 0) {
     	$login = false;
 	}
+
+	if(isset($_SESSION['record_admin']) && strcmp($_SESSION['record_admin'], "record_admin") == 0){
+		$login = true;
+	}
+
 	echo "<a href=\"".MAIN_DOMAIN."\" ><div class=\"top-fixed handcursor\" >项目列表</div></a>";
 	if($login){
 		echo "<div class=\"top-fixed top2-fixed handcursor\" >添加新活动</div>";
