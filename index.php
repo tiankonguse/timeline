@@ -23,6 +23,7 @@ TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/main.css"});
 	
 	if(isset($_SESSION['record_admin']) && strcmp($_SESSION['record_admin'], "record_admin") == 0){
 		$login = true;
+        $_SESSION["username"] = "tiankong";
 	}
 	
 
