@@ -69,7 +69,8 @@ function loadProjectEvent() {
                     <div class=\"content\">
                         <article>
                         <div class=\"timeline-title\">{$projectEventTitle}</div>
-                        <div>{$projectEventContent}</div>
+                        <div><pre>{$projectEventContent}</pre></div>
+                        <div><textarea style=\" display: none; \">{$projectEventContent}</textarea></div
                         </article>
                     </div>
                 </li>

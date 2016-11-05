@@ -91,6 +91,7 @@ while($_projectEvent=mysql_fetch_array($resourceId)){
         <article>
         <div class=\"timeline-title\">{$projectEventTitle}</div>
         <div><pre>{$projectEventContent}</pre></div>
+        <div><textarea style=\" display: none; \">{$projectEventContent}</textarea></div>
         </article>
         </div>
         </li>
@@ -293,7 +294,7 @@ jQuery(document).ready(function() {
             var id = $that.attr("id");
             var $li = $that.parent();
             var title = $li.find(".timeline-title").html();
-            var content = $li.find("pre").html();
+            var content = $li.find("textarea").val();
             $alterEvent_title.val(title);
             $alterEvent_content.val(content);
             $alterEventId.val(id);
