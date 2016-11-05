@@ -83,7 +83,7 @@ while($_projectEvent=mysql_fetch_array($resourceId)){
     $date = date("Y-m-d",$projectEventTime);
     $time = date("H:i:s",$projectEventTime);
     echo "
-        <li>
+        <li class=\"eventli\">
         <div class=\"date\">{$date}</div>
         <div class=\"time\">{$time}</div>
         <div class=\"number\" id=\"{$projectEventId}\"> {$projectEventNum}</div>

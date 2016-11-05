@@ -6,12 +6,21 @@ ul.timeline {
     padding: 0;
 }
 
-ul.timeline li {
+ul.timeline pre md ul{
+    line-height: 12px;
+}
+
+ul.timeline pre md p{
+    margin: 0px;
+    padding: 0px;
+}
+
+ul.timeline li.eventli {
     position: relative;
     margin-bottom: 20px;
 }
 
-ul.timeline li .date {
+ul.timeline li.eventli .date {
     position: absolute;
     width: 120px;
     text-align: right;
@@ -20,7 +29,7 @@ ul.timeline li .date {
     color: #999;
 }
 
-ul.timeline li .time {
+ul.timeline li.eventli .time {
     position: absolute;
     width: 290px;
     text-align: right;
@@ -32,7 +41,7 @@ ul.timeline li .time {
     overflow: hidden;
 }
 
-ul.timeline li .number {
+ul.timeline li.eventli .number {
     position: absolute;
     background: url("/timeline/img/version_dot.png") no-repeat scroll 0 0
         transparent;
@@ -45,15 +54,15 @@ ul.timeline li .number {
     font-size: 18px;
 }
 
-ul.timeline li.alt .number {
+ul.timeline li.eventli.alt .number {
     background-image: url("/timeline/img/version_dot_alt.png");
 }
 
-ul.timeline li .content {
+ul.timeline li.eventli .content {
     margin-left: 180px;
 }
 
-ul.timeline li .content article {
+ul.timeline li.eventli .content article {
     background-color: #CCCCCC;
     padding: 20px;
     color: #141314;
@@ -61,7 +70,7 @@ ul.timeline li .content article {
     line-height: 20px;
 }
 
-ul.timeline li.alt .content article {
+ul.timeline li.eventli.alt .content article {
     background-color: #43B1F1;
 }
 

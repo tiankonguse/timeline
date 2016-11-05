@@ -62,7 +62,7 @@ function loadProjectEvent() {
             $date = date ( "Y-m-d", $projectEventTime );
             $time = date ( "H:i:s", $projectEventTime );
             $html .= "
-                <li>
+                <li class=\"eventli\">
                     <div class=\"date\">{$date}</div>
                     <div class=\"time\">{$time}</div>
                     <div class=\"number\"> {$nowProjectEventNum}</div>
