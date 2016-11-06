@@ -65,11 +65,11 @@ function loadProjectEvent() {
                 <li class=\"eventli\">
                     <div class=\"date\">{$date}</div>
                     <div class=\"time\">{$time}</div>
-                    <div class=\"number\"> {$nowProjectEventNum}</div>
+                    <div class=\"number\"  id=\"{$projectEventId}\"> {$nowProjectEventNum}</div>
                     <div class=\"content\">
                         <article>
                         <div class=\"timeline-title\">{$projectEventTitle}</div>
-                        <div><pre>{$projectEventContent}</pre></div>
+                        <div><pre class=\"nomarked\">{$projectEventContent}</pre></div>
                         <div><textarea style=\" display: none; \">{$projectEventContent}</textarea></div
                         </article>
                     </div>

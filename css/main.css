@@ -13,6 +13,7 @@ ul.timeline pre md ul{
 ul.timeline pre md p{
     margin: 0px;
     padding: 0px;
+    line-height: 20px;
 }
 
 ul.timeline li.eventli {

@@ -37,7 +37,9 @@ $title = $projectName;
 require BASE_INC . 'head.inc.php';
 ?>
 <script type="text/javascript">
+TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/Github.css"});
 TK.loader.loadCSS({url:"<?php echo MAIN_PATH;?>css/main.css"});
+
 </script>
 
 </head>
@@ -71,7 +73,7 @@ if($login){
         <div class="container">
             <ul class="timeline">
 <?php
-$dataNumber = 10;
+$dataNumber = 1;
 $sql = "SELECT * FROM timeline_event WHERE projectId = '$projectId' ORDER BY id DESC limit 0,$dataNumber ";
 $resourceId = mysql_query($sql ,$conn);
 
@@ -90,7 +92,7 @@ while($_projectEvent=mysql_fetch_array($resourceId)){
         <div class=\"content\">
         <article>
         <div class=\"timeline-title\">{$projectEventTitle}</div>
-        <div><pre>{$projectEventContent}</pre></div>
+        <div><pre class=\"nomarked\">{$projectEventContent}</pre></div>
         <div><textarea style=\" display: none; \">{$projectEventContent}</textarea></div>
         </article>
         </div>
@@ -159,11 +161,31 @@ while($_projectEvent=mysql_fetch_array($resourceId)){
     </div>
 <script>
 TK.loader.loadJS({url:"<?php echo PATH_JS;?>main.js"});
+TK.loader.loadJS({url:"<?php echo MAIN_PATH;?>js/highlight.js"});
+TK.loader.loadJS({url:"<?php echo MAIN_PATH;?>js/marked.js"});
+
+
+
 </script>
     <footer>
         <?php  require BASE_INC . 'footer.inc.php'; ?>
     </footer>
 <script>
+
+    function makePartDom(){
+        var domlist = $("pre.nomarked md");
+        marked.setOptions({
+            highlight : function(code) {
+                return hljs.highlightAuto(code).value;
+            }
+        });
+        for(var i=0;i< domlist.length;i++){
+            var dom = domlist[i];
+            var data = dom.innerText;
+            var html = marked(data);
+            $(dom).html(html).parent().removeClass("nomarked");
+        }
+    }
 
 jQuery(document).ready(function() {
     var nowProjectEventNum = <?php echo $projectEventNum;?>;
@@ -177,18 +199,18 @@ jQuery(document).ready(function() {
 
     if (nowProjectEventNum == 0) {
         jQuery("#fetchNextData").css("display", "none");
-            }
-            jQuery('#fetchNextData').click(function() {
-                if (nowProjectEventNum > 0) {
-                    var $this = jQuery(this);
-                    $this.text('正在加载后面的数据...');
-                    ajaxLoading = true;
+    }
+    jQuery('#fetchNextData').click(function() {
+        if (nowProjectEventNum > 0) {
+            var $this = jQuery(this);
+            $this.text('正在加载后面的数据...');
+            ajaxLoading = true;
 
-                    jQuery.post('./inc/control.php?state=3', {
-                        "projectId" : projectId,
-                            "lastEventId" : lastEventId,
-                            "nextDataNumber" : nextDataNumber,
-                            "nowProjectEventNum" : nowProjectEventNum
+            jQuery.post('./inc/control.php?state=3', {
+                    "projectId" : projectId,
+                    "lastEventId" : lastEventId,
+                    "nextDataNumber" : nextDataNumber,
+                    "nowProjectEventNum" : nowProjectEventNum
                 }, function(data) {
                     if (data.code == -1) {
                         jQuery("#fetchNextData").css("display", "none");
@@ -199,29 +221,30 @@ jQuery(document).ready(function() {
                         nowProjectEventNum = data.message.nowProjectEventNum;
                         if (nowProjectEventNum == 0) {
                             jQuery("#fetchNextData").css("display", "none");
-                    }
-                    ulNode.append(data.message.html);
-                    $this.text('查看更多');
+                        }
+                        ulNode.append(data.message.html);
+                        $this.text('查看更多');
+                        makePartDom();
                     } else {
                         $this.text('加载出错');
                     }
                     ajaxLoading = false;
                 }, "json");
-                }
+        }
 
-            });
+    });
 
-            docNode
-                .scroll(function() {
-                    if (nowProjectEventNum > 0
-                        && docNode.height() - jQuery(window).height()
-                        - docNode.scrollTop() < 150) {
-                            if (!ajaxLoading) {
-                                jQuery('#fetchNextData').click();
-                            }
+    docNode
+        .scroll(function() {
+            if (nowProjectEventNum > 0
+                && docNode.height() - jQuery(window).height()
+                - docNode.scrollTop() < 150) {
+                    if (!ajaxLoading) {
+                        jQuery('#fetchNextData').click();
                     }
+            }
 
-                });
+        });
 
 
         var $addEvent = jQuery('#addEvent');
@@ -289,7 +312,8 @@ jQuery(document).ready(function() {
         var $alterEvent_modal_backdrop = jQuery(".alterEvent.modal-backdrop");
         var $alterEventId = jQuery("#alterEventId");
 
-        $('.number').bind('click', function() {
+        jQuery('body').delegate('.number','click', function() {
+            console.log(this);
             var $that = $(this);
             var id = $that.attr("id");
             var $li = $that.parent();
@@ -339,6 +363,7 @@ jQuery(document).ready(function() {
             }
             return false;
         });
+        makePartDom();
     });
     </script>
 </body>
